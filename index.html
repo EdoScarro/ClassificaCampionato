@@ -153,38 +153,39 @@
     if (sezione === "risultati") renderRisultati();
   }
 
-  const squadre = [
-    { nome: "Casa del Giovane", partite: 1, vittorie: 1, pareggi: 0, sconfitte: 0, goalFatti: 10, goalSubiti: 5 },
-    { nome: "Nuova Aurora", partite: 0, vittorie: 0, pareggi: 0, sconfitte: 0, goalFatti: 0, goalSubiti: 0 },
-    { nome: "CDM Futsal", partite: 0, vittorie: 0, pareggi: 0, sconfitte: 0, goalFatti: 0, goalSubiti: 0 },
-    { nome: "Airone", partite: 1, vittorie: 0, pareggi: 0, sconfitte: 1, goalFatti: 5, goalSubiti: 10 }
-  ];
+const squadre = [
+  { nome: "Casa del Giovane", partite: 1, vittorie: 1, pareggi: 0, sconfitte: 0, goalFatti: 10, goalSubiti: 5 },
+  { nome: "Nuova Aurora", partite: 0, vittorie: 0, pareggi: 0, sconfitte: 0, goalFatti: 0, goalSubiti: 0 },
+  { nome: "CDM Futsal", partite: 0, vittorie: 0, pareggi: 0, sconfitte: 0, goalFatti: 0, goalSubiti: 0 },
+  { nome: "Cantarana", partite: 0, vittorie: 0, pareggi: 0, sconfitte: 0, goalFatti: 0, goalSubiti: 0 },
+  { nome: "Airone", partite: 1, vittorie: 0, pareggi: 0, sconfitte: 1, goalFatti: 5, goalSubiti: 10 },
+];
 
-  squadre.forEach(s => {
-    s.punti = s.vittorie * 3 + s.pareggi;
-    s.diffReti = s.goalFatti - s.goalSubiti;
-  });
-  squadre.sort((a, b) => {
-    if (b.punti !== a.punti) return b.punti - a.punti;
-    return b.diffReti - a.diffReti;
-  });
+squadre.forEach(s => {
+  s.punti = s.vittorie * 3 + s.pareggi;
+  s.diffReti = s.goalFatti - s.goalSubiti;
+});
+squadre.sort((a, b) => {
+  if (b.punti !== a.punti) return b.punti - a.punti;
+  return b.diffReti - a.diffReti;
+});
 
-  const tbodyClassifica = document.getElementById("classifica-body");
-  tbodyClassifica.innerHTML = "";
-  squadre.forEach(s => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td class="team-name">${s.nome}</td>
-      <td>${s.partite}</td>
-      <td>${s.vittorie}</td>
-      <td>${s.pareggi}</td>
-      <td>${s.sconfitte}</td>
-      <td>${s.punti}</td>
-      <td>${s.goalFatti}</td>
-      <td>${s.goalSubiti}</td>
-    `;
-    tbodyClassifica.appendChild(row);
-  });
+const tbody = document.getElementById("classifica-body");
+tbody.innerHTML = "";
+squadre.forEach(s => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td class="team-name">${s.nome}</td>
+    <td>${s.partite}</td>
+    <td>${s.vittorie}</td>
+    <td>${s.pareggi}</td>
+    <td>${s.sconfitte}</td>
+    <td>${s.punti}</td>
+    <td>${s.goalFatti}</td>
+    <td>${s.goalSubiti}</td>
+  `;
+  tbody.appendChild(row);
+});
   const marcatori = [
     { nome: "Riccardo Garelli", squadra: "Casa del Giovane", gol: 4 },
     { nome: "Giorgio Tassistro", squadra: "Casa del Giovane", gol: 3 },
