@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Campionato CDG – Classifiche</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background-color: #0b1e3f;
+      color: #f0e6c8;
+      padding: 20px;
+      margin: 0;
+      padding-bottom: 100px;
+    }
+    h1 {
+      text-align: center;
+      color: #ffd700;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #3a5a8f;
+      text-align: center;
+    }
+    th {
+      background-color: #1f3a6e;
+      color: #ffd700;
+    }
+    td {
+      background-color: #2a4d8f;
+    }
+    .team-name {
+      font-weight: bold;
+      color: white;
+    }
+    .hidden {
+      display: none;
+    }
+    #risultati-righe {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    .riga-giornate {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .giornata-box {
+      flex: 1 1 30%;
+      max-width: 300px;
+      background-color: #1f3a6e;
+      border-radius: 10px;
+      padding: 15px;
+    }
+    .giornata-titolo {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .partita {
+      background-color: #2a4d8f;
+      padding: 8px 12px;
+      margin: 5px 0;
+      border-radius: 5px;
+      color: #f0e6c8;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
+    }
+    #menu {
+      position: relative;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    #menu button {
+      padding: 10px 20px;
+      font-weight: bold;
+      background-color: #ffd700;
+      color: #0b1e3f;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="titolo">Campionato CDG – Classifica Squadre</h1>
+
+  <div id="classifica">
+    <table>
+      <thead>
+        <tr>
+          <th>Squadra</th><th>PG</th><th>V</th><th>P</th><th>S</th><th>PT</th><th>GF</th><th>GS</th>
+        </tr>
+      </thead>
+      <tbody id="classifica-body"></tbody>
+    </table>
+  </div>
+
+  <div id="marcatori" class="hidden">
+    <table>
+      <thead>
+        <tr>
+          <th>Giocatore</th><th>Squadra</th><th>Gol</th>
+        </tr>
+      </thead>
+      <tbody id="marcatori-body"></tbody>
+    </table>
+  </div>
+
+  <div id="risultati" class="hidden">
+    <div id="risultati-righe">
+      <div class="riga-giornate" id="riga-superiore"></div>
+      <div class="riga-giornate" id="riga-inferiore"></div>
+    </div>
+  </div>
+
+  <div id="menu">
+    <button onclick="mostra('classifica')">Classifica Squadre</button>
+    <button onclick="mostra('marcatori')">Classifica Marcatori</button>
+    <button onclick="mostra('risultati')">Risultati Partite</button>
+  </div>
+<script>
+  console.log("Script caricato correttamente");
+
+  function mostra(sezione) {
+    document.getElementById("classifica").classList.add("hidden");
+    document.getElementById("marcatori").classList.add("hidden");
+    document.getElementById("risultati").classList.add("hidden");
+    document.getElementById(sezione).classList.remove("hidden");
+
+    const titoli = {
+      classifica: "Campionato CDG – Classifica Squadre",
+      marcatori: "Campionato CDG – Classifica Marcatori",
+      risultati: "Campionato CDG – Risultati Partite"
+    };
+    document.getElementById("titolo").textContent = titoli[sezione];
+
+    if (sezione === "risultati") renderRisultati();
+  }
+
+  const squadre = [
+    { nome: "Casa del Giovane", partite: 1, vittorie: 1, pareggi: 0, sconfitte: 0, goalFatti: 10, goalSubiti: 5 },
+    { nome: "Nuova Aurora", partite: 0, vittorie: 0, pareggi: 0, sconfitte: 0, goalFatti: 0, goalSubiti: 0 },
+    { nome: "CDM Futsal", partite: 0, vittorie: 0, pareggi: 0, sconfitte: 0, goalFatti: 0, goalSubiti: 0 },
+    { nome: "Airone", partite: 1, vittorie: 0, pareggi: 0, sconfitte: 1, goalFatti: 5, goalSubiti: 10 }
+  ];
+
+  squadre.forEach(s => {
+    s.punti = s.vittorie * 3 + s.pareggi;
+    s.diffReti = s.goalFatti - s.goalSubiti;
+  });
+  squadre.sort((a, b) => {
+    if (b.punti !== a.punti) return b.punti - a.punti;
+    return b.diffReti - a.diffReti;
+  });
+
+  const tbodyClassifica = document.getElementById("classifica-body");
+  tbodyClassifica.innerHTML = "";
+  squadre.forEach(s => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td class="team-name">${s.nome}</td>
+      <td>${s.partite}</td>
+      <td>${s.vittorie}</td>
+      <td>${s.pareggi}</td>
+      <td>${s.sconfitte}</td>
+      <td>${s.punti}</td>
+      <td>${s.goalFatti}</td>
+      <td>${s.goalSubiti}</td>
+    `;
+    tbodyClassifica.appendChild(row);
+  });
+  const marcatori = [
+    { nome: "Riccardo Garelli", squadra: "Casa del Giovane", gol: 4 },
+    { nome: "Giorgio Tassistro", squadra: "Casa del Giovane", gol: 3 },
+    { nome: "Luca Tonel", squadra: "Airone", gol: 2 },
+    { nome: "Aron Stosanovski", squadra: "Airone", gol: 2 },
+    { nome: "Leonardo Martini", squadra: "Casa del Giovane", gol: 1 },
+    { nome: "Imrane Djouni", squadra: "Casa del Giovane", gol: 1 },
+    { nome: "Carlo Tempesta", squadra: "Casa del Giovane", gol: 1 },
+    { nome: "Rayyan", squadra: "Airone", gol: 1 }
+  ];
+
+  marcatori.sort((a, b) => b.gol - a.gol);
+
+  const tbodyMarcatori = document.getElementById("marcatori-body");
+  tbodyMarcatori.innerHTML = "";
+  marcatori.forEach(m => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${m.nome}</td>
+      <td>${m.squadra}</td>
+      <td>${m.gol}</td>
+    `;
+    tbodyMarcatori.appendChild(row);
+  });
+
+  const risultati = [
+    { giornata: 1, casa: "Casa del Giovane", golCasa: 10, trasferta: "Airone", golTrasferta: 5 }
+  ];
+
+ function renderRisultati() {
+  const superiore = document.getElementById("riga-superiore");
+  const inferiore = document.getElementById("riga-inferiore");
+  superiore.innerHTML = "";
+  inferiore.innerHTML = "";
+
+  for (let g = 1; g <= 6; g++) {
+    const box = document.createElement("div");
+    box.className = "giornata-box";
+    box.innerHTML = `<div class="giornata-titolo">${g}ª Giornata</div>`;
+
+    risultati
+      .filter(r => r.giornata === g)
+      .forEach(r => {
+        const partita = document.createElement("div");
+        partita.className = "partita";
+        partita.innerHTML = `
+          <span style="font-weight:bold">${r.casa}</span>
+          <span> ${r.golCasa} – ${r.golTrasferta} </span>
+          <span style="font-weight:bold">${r.trasferta}</span>
+        `;
+        box.appendChild(partita);
+      });
+
+    if (g <= 3) {
+      superiore.appendChild(box);
+    } else {
+      inferiore.appendChild(box);
+    }
+  }
+}
+
+</script>
+</body>
+</html>
