@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Campionato CDG – Classifiche</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -42,64 +43,10 @@
     .hidden {
       display: none;
     }
-    #risultati-righe {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-    }
-    .riga-giornate {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .giornata-box {
-      flex: 1 1 30%;
-      max-width: 300px;
-      background-color: #1f3a6e;
-      border-radius: 10px;
-      padding: 15px;
-    }
-    .giornata-titolo {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #ffd700;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-    .partita {
-      background-color: #2a4d8f;
-      padding: 8px 12px;
-      margin: 5px 0;
-      border-radius: 5px;
-      color: #f0e6c8;
-      display: flex;
-      justify-content: space-between;
-      font-weight: 500;
-    }
-    #menu {
-      position: relative;
-      bottom: 0;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 40px;
-      flex-wrap: wrap;
-    }
-    #menu button {
-      padding: 10px 20px;
-      font-weight: bold;
-      background-color: #ffd700;
-      color: #0b1e3f;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
   <h1 id="titolo">Campionato CDG – Classifica Squadre</h1>
-
   <!-- Sezione Classifica Squadre -->
   <div id="classifica">
     <table>
@@ -132,150 +79,203 @@
     </div>
   </div>
 
-  <!-- Menu di navigazione -->
+  <!-- Menu -->
   <div id="menu">
     <button onclick="mostra('classifica')">Classifica Squadre</button>
     <button onclick="mostra('marcatori')">Classifica Marcatori</button>
     <button onclick="mostra('risultati')">Risultati Partite</button>
   </div>
+<style>
+  #risultati-righe {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .riga-giornate {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .giornata-box {
+    flex: 1 1 30%;
+    max-width: 300px;
+    background-color: #1f3a6e;
+    border-radius: 10px;
+    padding: 15px;
+  }
+  .giornata-titolo {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .partita {
+    background-color: #2a4d8f;
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 5px;
+    color: #f0e6c8;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+  }
+  #menu {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  #menu button {
+    padding: 10px 20px;
+    font-weight: bold;
+    background-color: #ffd700;
+    color: #0b1e3f;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
 <script>
-  console.log("Script caricato correttamente");
+function mostra(sezione) {
+  document.getElementById("classifica").classList.add("hidden");
+  document.getElementById("marcatori").classList.add("hidden");
+  document.getElementById("risultati").classList.add("hidden");
+  document.getElementById(sezione).classList.remove("hidden");
 
-  // Funzione per mostrare la sezione scelta
-  function mostra(sezione) {
-    document.getElementById("classifica").classList.add("hidden");
-    document.getElementById("marcatori").classList.add("hidden");
-    document.getElementById("risultati").classList.add("hidden");
-    document.getElementById(sezione).classList.remove("hidden");
+  const titoli = {
+    classifica: "Campionato CDG – Classifica Squadre",
+    marcatori: "Campionato CDG – Classifica Marcatori",
+    risultati: "Campionato CDG – Risultati Partite"
+  };
+  document.getElementById("titolo").textContent = titoli[sezione];
 
-    const titoli = {
-      classifica: "Campionato CDG – Classifica Squadre",
-      marcatori: "Campionato CDG – Classifica Marcatori",
-      risultati: "Campionato CDG – Risultati Partite"
-    };
-    document.getElementById("titolo").textContent = titoli[sezione];
+  if (sezione === "risultati") renderRisultati();
+}
 
-    if (sezione === "risultati") renderRisultati();
+// ---------------- CLASSIFICA SQUADRE ----------------
+const squadre = [
+  { nome: "Nuova Aurora", partite: 4, vittorie: 3, pareggi: 1, sconfitte: 0, goalFatti: 41, goalSubiti: 17 },
+  { nome: "Casa del Giovane", partite: 3, vittorie: 1, pareggi: 1, sconfitte: 1, goalFatti: 13, goalSubiti: 16 },
+  { nome: "Airone", partite: 3, vittorie: 1, pareggi: 0, sconfitte: 2, goalFatti: 10, goalSubiti: 28 },
+  { nome: "Cantarana", partite: 1, vittorie: 0, pareggi: 1, sconfitte: 0, goalFatti: 8, goalSubiti: 8 },
+  { nome: "CDM Futsal", partite: 3, vittorie: 0, pareggi: 1, sconfitte: 2, goalFatti: 10, goalSubiti: 17 },
+];
+
+squadre.forEach(s => {
+  s.punti = s.vittorie * 3 + s.pareggi;
+  s.diff = s.goalFatti - s.goalSubiti;
+});
+
+squadre.sort((a, b) => b.punti - a.punti || b.diff - a.diff);
+
+const tbodyClassifica = document.getElementById("classifica-body");
+tbodyClassifica.innerHTML = "";
+
+squadre.forEach(s => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td class="team-name">${s.nome}</td>
+    <td>${s.partite}</td>
+    <td>${s.vittorie}</td>
+    <td>${s.pareggi}</td>
+    <td>${s.sconfitte}</td>
+    <td>${s.punti}</td>
+    <td>${s.goalFatti}</td>
+    <td>${s.goalSubiti}</td>
+  `;
+  tbodyClassifica.appendChild(row);
+});
+
+// ---------------- CLASSIFICA MARCATORI ----------------
+const marcatori = [
+  { nome: "Alvin Abazi", squadra: "Nuova Aurora", gol: 8 },
+  { nome: "Luca Barbano", squadra: "Nuova Aurora", gol: 7 },
+  { nome: "Leonardo Lazzarino", squadra: "Nuova Aurora", gol: 7 },
+  { nome: "Riccardo Garelli", squadra: "Casa del Giovane", gol: 5 },
+  { nome: "Tommaso Gavello", squadra: "Cantarana", gol: 5 },
+  { nome: "Giorgio Torre", squadra: "CDM Futsal", gol: 5 },
+  { nome: "Thomas Costanzo", squadra: "Nuova Aurora", gol: 5 },
+  { nome: "Leonardo Mazzucco", squadra: "Nuova Aurora", gol: 5 },
+  { nome: "Giorgio Tassistro", squadra: "Casa del Giovane", gol: 4 },
+  { nome: "Diego Sanchelli", squadra: "Nuova Aurora", gol: 3 },
+  { nome: "Luca Tonel", squadra: "Airone", gol: 2 },
+  { nome: "Aron Stosanovski", squadra: "Airone", gol: 2 },
+  { nome: "Leonardo Martini", squadra: "Casa del Giovane", gol: 2 },
+  { nome: "Lorenzo Franzé", squadra: "Cantarana", gol: 2 },
+  { nome: "Adam Jaadour", squadra: "Airone", gol: 2 },
+  { nome: "Lorenzo Ferraris", squadra: "Airone", gol: 2 },
+  { nome: "Mattia Lo Prete", squadra: "CDM Futsal", gol: 2 },
+  { nome: "Giacomo Sottili", squadra: "CDM Futsal", gol: 2 },
+  { nome: "Leandro Bonelli", squadra: "Nuova Aurora", gol: 2 },
+  { nome: "Imrane Djouni", squadra: "Casa del Giovane", gol: 1 },
+  { nome: "Carlo Tempesta", squadra: "Casa del Giovane", gol: 1 },
+  { nome: "Rayyan", squadra: "Airone", gol: 1 },
+  { nome: "Francesco Taddei", squadra: "CDM Futsal", gol: 1 },
+  { nome: "Manuel Amdrino", squadra: "Nuova Aurora", gol: 1 },
+  { nome: "Andrea Finotto", squadra: "Cantarana", gol: 1 },
+  { nome: "Adam Dliaa", squadra: "Airone", gol: 1 },
+  { nome: "Federico Pecoraro", squadra: "Nuova Aurora", gol: 1 },
+  { nome: "Alessandro D'Antoni", squadra: "Nuova Aurora", gol: 1 },
+];
+
+marcatori.sort((a, b) => b.gol - a.gol);
+
+const tbody = document.getElementById("marcatori-body");
+tbody.innerHTML = "";
+marcatori.forEach(m => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${m.nome}</td>
+    <td>${m.squadra}</td>
+    <td>${m.gol}</td>
+  `;
+  tbody.appendChild(row);
+});
+// ---------------- RISULTATI PARTITE ----------------
+const risultati = [
+  { giornata: undefined, casa: "undefined", golCasa: undefined, trasferta: "undefined", golTrasferta: undefined },
+  { giornata: 1, casa: "Casa del Giovane", golCasa: 10, trasferta: "Airone", golTrasferta: 5 },
+  { giornata: 2, casa: "Casa del Giovane", golCasa: 3, trasferta: "CDM Futsal", golTrasferta: 3 },
+  { giornata: 2, casa: "Nuova Aurora", golCasa: 16, trasferta: "Airone", golTrasferta: 0 },
+  { giornata: 2, casa: "Nuova Aurora", golCasa: 8, trasferta: "Cantarana", golTrasferta: 8 },
+  { giornata: 3, casa: "Airone", golCasa: 5, trasferta: "CDM Futsal", golTrasferta: 2 },
+  { giornata: 3, casa: "Nuova Aurora", golCasa: 8, trasferta: "Casa del Giovane", golTrasferta: 0 },
+  { giornata: 1, casa: "CDM Futsal", golCasa: 5, trasferta: "Nuova Aurora", golTrasferta: 9 },
+];
+
+renderRisultati();
+function renderRisultati() {
+  const sup = document.getElementById("riga-superiore");
+  const inf = document.getElementById("riga-inferiore");
+
+  sup.innerHTML = "";
+  inf.innerHTML = "";
+
+  for (let g = 1; g <= 6; g++) {
+    const box = document.createElement("div");
+    box.className = "giornata-box";
+    box.innerHTML = `<div class="giornata-titolo">${g}ª Giornata</div>`;
+
+    risultati.filter(r => r.giornata === g).forEach(r => {
+      const partita = document.createElement("div");
+      partita.className = "partita";
+      partita.innerHTML = `
+        <span><b>${r.casa}</b></span>
+        <span>${r.golCasa} – ${r.golTrasferta}</span>
+        <span><b>${r.trasferta}</b></span>
+      `;
+      box.appendChild(partita);
+    });
+
+    if (g <= 3) sup.appendChild(box);
+    else inf.appendChild(box);
   }
+}
 
-  // ---------------- CLASSIFICA SQUADRE ----------------
-  const squadre = [
-    { nome: "Nuova Aurora", partite: 2, vittorie: 1, pareggi: 1, sconfitte: 0, goalFatti: 24, goalSubiti: 8 },
-    { nome: "Casa del Giovane", partite: 2, vittorie: 1, pareggi: 1, sconfitte: 0, goalFatti: 13, goalSubiti: 8 },
-    { nome: "CDM Futsal", partite: 1, vittorie: 0, pareggi: 1, sconfitte: 0, goalFatti: 3, goalSubiti: 3 },
-    { nome: "Cantarana", partite: 1, vittorie: 0, pareggi: 1, sconfitte: 0, goalFatti: 8, goalSubiti: 8 },
-    { nome: "Airone", partite: 2, vittorie: 0, pareggi: 0, sconfitte: 2, goalFatti: 5, goalSubiti: 26 },
-  ];
-
-  squadre.forEach(s => {
-    s.punti = s.vittorie * 3 + s.pareggi;
-    s.diffReti = s.goalFatti - s.goalSubiti;
-  });
-  squadre.sort((a, b) => {
-    if (b.punti !== a.punti) return b.punti - a.punti;
-    return b.diffReti - a.diffReti;
-  });
-
-  const tbodyClassifica = document.getElementById("classifica-body");
-  tbodyClassifica.innerHTML = "";
-  squadre.forEach(s => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td class="team-name">${s.nome}</td>
-      <td>${s.partite}</td>
-      <td>${s.vittorie}</td>
-      <td>${s.pareggi}</td>
-      <td>${s.sconfitte}</td>
-      <td>${s.punti}</td>
-      <td>${s.goalFatti}</td>
-      <td>${s.goalSubiti}</td>
-    `;
-    tbodyClassifica.appendChild(row);
-  });
-
-  // ---------------- CLASSIFICA MARCATORI ----------------
-  const marcatori = [
-    { nome: "Leonardo Lazzarino", squadra: "Nuova Aurora", gol: 6 },
-    { nome: "Riccardo Garelli", squadra: "Casa del Giovane", gol: 5 },
-    { nome: "Luca Barbano", squadra: "Nuova Aurora", gol: 5 },
-    { nome: "Tommaso Gavello", squadra: "Cantarana", gol: 5 },
-    { nome: "Giorgio Tassistro", squadra: "Casa del Giovane", gol: 4 },
-    { nome: "Alvin Abazi", squadra: "Nuova Aurora", gol: 4 },
-    { nome: "Diego Sanchelli", squadra: "Nuova Aurora", gol: 3 },
-    { nome: "Luca Tonel", squadra: "Airone", gol: 2 },
-    { nome: "Aron Stosanovski", squadra: "Airone", gol: 2 },
-    { nome: "Leonardo Martini", squadra: "Casa del Giovane", gol: 2 },
-    { nome: "Leonardo Mazzucco", squadra: "Nuova Aurora", gol: 2 },
-    { nome: "Lorenzo Franzé", squadra: "Cantarana", gol: 2 },
-    { nome: "Imrane Djouni", squadra: "Casa del Giovane", gol: 1 },
-    { nome: "Carlo Tempesta", squadra: "Casa del Giovane", gol: 1 },
-    { nome: "Rayyan", squadra: "Airone", gol: 1 },
-    { nome: "Francesco Taddei", squadra: "CDM Futsal", gol: 1 },
-    { nome: "Giacomo Sottili", squadra: "CDM Futsal", gol: 1 },
-    { nome: "Mattia Lo Prete", squadra: "CDM Futsal", gol: 1 },
-    { nome: "Leandro Bonello", squadra: "Nuova Aurora", gol: 1 },
-    { nome: "Manuel Amdrino", squadra: "Nuova Aurora", gol: 1 },
-    { nome: "Thomas Costanzo", squadra: "Nuova Aurora", gol: 1 },
-    { nome: "Andrea Finotto", squadra: "Cantarana", gol: 1 },
-  ];
-
-  marcatori.sort((a, b) => b.gol - a.gol);
-
-  const tbodyMarcatori = document.getElementById("marcatori-body");
-  tbodyMarcatori.innerHTML = "";
-  marcatori.forEach(m => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${m.nome}</td>
-      <td>${m.squadra}</td>
-      <td>${m.gol}</td>
-    `;
-    tbodyMarcatori.appendChild(row);
-  });
-
-  // ---------------- RISULTATI PARTITE ----------------
-  const risultati = [
-    { giornata: 1, casa: "Casa del Giovane", golCasa: 10, trasferta: "Airone", golTrasferta: 5 },
-    { giornata: 2, casa: "Casa del Giovane", golCasa: 3, trasferta: "CDM Futsal", golTrasferta: 3 },
-    { giornata: 2, casa: "Nuova Aurora", golCasa: 16, trasferta: "Airone", golTrasferta: 0 },
-    { giornata: 2, casa: "Nuova Aurora", golCasa: 8, trasferta: "Cantarana", golTrasferta: 8 },
-  ];
-
-  function renderRisultati() {
-    const superiore = document.getElementById("riga-superiore");
-    const inferiore = document.getElementById("riga-inferiore");
-    superiore.innerHTML = "";
-    inferiore.innerHTML = "";
-
-    for (let g = 1; g <= 6; g++) {
-      const box = document.createElement("div");
-      box.className = "giornata-box";
-      box.innerHTML = `<div class="giornata-titolo">${g}ª Giornata</div>`;
-
-      risultati
-        .filter(r => r.giornata === g)
-        .forEach(r => {
-          const partita = document.createElement("div");
-          partita.className = "partita";
-          partita.innerHTML = `
-            <span style="font-weight:bold">${r.casa}</span>
-            <span> ${r.golCasa} – ${r.golTrasferta} </span>
-            <span style="font-weight:bold">${r.trasferta}</span>
-          `;
-          box.appendChild(partita);
-        });
-
-      if (g <= 3) {
-        superiore.appendChild(box);
-      } else {
-        inferiore.appendChild(box);
-      }
-    }
-  }
-
-  // Chiamata iniziale per popolare i risultati
-  renderRisultati();
+renderRisultati();
 </script>
 </body>
 </html>
-
