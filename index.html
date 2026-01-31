@@ -47,7 +47,8 @@
 </head>
 <body>
   <h1 id="titolo">Campionato CDG – Classifica Squadre</h1>
-  <!-- Sezione Classifica Squadre -->
+
+  <!-- CLASSIFICA SQUADRE -->
   <div id="classifica">
     <table>
       <thead>
@@ -59,7 +60,7 @@
     </table>
   </div>
 
-  <!-- Sezione Classifica Marcatori -->
+  <!-- CLASSIFICA MARCATORI -->
   <div id="marcatori" class="hidden">
     <table>
       <thead>
@@ -71,7 +72,7 @@
     </table>
   </div>
 
-  <!-- Sezione Risultati Partite -->
+  <!-- RISULTATI PARTITE -->
   <div id="risultati" class="hidden">
     <div id="risultati-righe">
       <div class="riga-giornate" id="riga-superiore"></div>
@@ -79,7 +80,7 @@
     </div>
   </div>
 
-  <!-- Menu -->
+  <!-- MENU -->
   <div id="menu">
     <button onclick="mostra('classifica')">Classifica Squadre</button>
     <button onclick="mostra('marcatori')">Classifica Marcatori</button>
@@ -155,9 +156,9 @@ function mostra(sezione) {
   if (sezione === "risultati") renderRisultati();
 }
 
-// ---------------- CLASSIFICA SQUADRE ----------------
+/* ---------------- CLASSIFICA SQUADRE ---------------- */
 const squadre = [
-  { nome: "Nuova Aurora", partite: 4, vittorie: 3, pareggi: 1, sconfitte: 0, goalFatti: 41, goalSubiti: 17 },
+  { nome: "Nuova Aurora", partite: 4, vittorie: 3, pareggi: 1, sconfitte: 0, goalFatti: 41, goalSubiti: 13 },
   { nome: "Casa del Giovane", partite: 3, vittorie: 1, pareggi: 1, sconfitte: 1, goalFatti: 13, goalSubiti: 16 },
   { nome: "Airone", partite: 3, vittorie: 1, pareggi: 0, sconfitte: 2, goalFatti: 10, goalSubiti: 28 },
   { nome: "Cantarana", partite: 1, vittorie: 0, pareggi: 1, sconfitte: 0, goalFatti: 8, goalSubiti: 8 },
@@ -166,14 +167,12 @@ const squadre = [
 
 squadre.forEach(s => {
   s.punti = s.vittorie * 3 + s.pareggi;
-  s.diff = s.goalFatti - s.goalSubiti;
+  s.diffReti = s.goalFatti - s.goalSubiti;
 });
-
-squadre.sort((a, b) => b.punti - a.punti || b.diff - a.diff);
+squadre.sort((a, b) => b.punti - a.punti || b.diffReti - a.diffReti);
 
 const tbodyClassifica = document.getElementById("classifica-body");
 tbodyClassifica.innerHTML = "";
-
 squadre.forEach(s => {
   const row = document.createElement("tr");
   row.innerHTML = `
@@ -189,7 +188,7 @@ squadre.forEach(s => {
   tbodyClassifica.appendChild(row);
 });
 
-// ---------------- CLASSIFICA MARCATORI ----------------
+/* ---------------- CLASSIFICA MARCATORI ---------------- */
 const marcatori = [
   { nome: "Alvin Abazi", squadra: "Nuova Aurora", gol: 8 },
   { nome: "Luca Barbano", squadra: "Nuova Aurora", gol: 7 },
@@ -223,8 +222,8 @@ const marcatori = [
 
 marcatori.sort((a, b) => b.gol - a.gol);
 
-const tbody = document.getElementById("marcatori-body");
-tbody.innerHTML = "";
+const tbodyMarcatori = document.getElementById("marcatori-body");
+tbodyMarcatori.innerHTML = "";
 marcatori.forEach(m => {
   const row = document.createElement("tr");
   row.innerHTML = `
@@ -232,21 +231,20 @@ marcatori.forEach(m => {
     <td>${m.squadra}</td>
     <td>${m.gol}</td>
   `;
-  tbody.appendChild(row);
+  tbodyMarcatori.appendChild(row);
 });
-// ---------------- RISULTATI PARTITE ----------------
+
+/* ---------------- RISULTATI PARTITE ---------------- */
 const risultati = [
-  { giornata: undefined, casa: "undefined", golCasa: undefined, trasferta: "undefined", golTrasferta: undefined },
   { giornata: 1, casa: "Casa del Giovane", golCasa: 10, trasferta: "Airone", golTrasferta: 5 },
+  { giornata: 1, casa: "CDM Futsal", golCasa: 5, trasferta: "Nuova Aurora", golTrasferta: 9 },
   { giornata: 2, casa: "Casa del Giovane", golCasa: 3, trasferta: "CDM Futsal", golTrasferta: 3 },
   { giornata: 2, casa: "Nuova Aurora", golCasa: 16, trasferta: "Airone", golTrasferta: 0 },
   { giornata: 2, casa: "Nuova Aurora", golCasa: 8, trasferta: "Cantarana", golTrasferta: 8 },
   { giornata: 3, casa: "Airone", golCasa: 5, trasferta: "CDM Futsal", golTrasferta: 2 },
   { giornata: 3, casa: "Nuova Aurora", golCasa: 8, trasferta: "Casa del Giovane", golTrasferta: 0 },
-  { giornata: 1, casa: "CDM Futsal", golCasa: 5, trasferta: "Nuova Aurora", golTrasferta: 9 },
 ];
 
-renderRisultati();
 function renderRisultati() {
   const sup = document.getElementById("riga-superiore");
   const inf = document.getElementById("riga-inferiore");
