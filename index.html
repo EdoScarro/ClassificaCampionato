@@ -169,10 +169,13 @@ squadre.forEach(s => {
   s.punti = s.vittorie * 3 + s.pareggi;
   s.diffReti = s.goalFatti - s.goalSubiti;
 });
-squadre.sort((a, b) => b.punti - a.punti || b.diffReti - a.diffReti);
+squadre.sort((a, b) => {
+  if (b.punti !== a.punti) return b.punti - a.punti;
+  return b.diffReti - a.diffReti;
+});
 
-const tbodyClassifica = document.getElementById("classifica-body");
-tbodyClassifica.innerHTML = "";
+const tbody = document.getElementById("classifica-body");
+tbody.innerHTML = "";
 squadre.forEach(s => {
   const row = document.createElement("tr");
   row.innerHTML = `
@@ -185,9 +188,8 @@ squadre.forEach(s => {
     <td>${s.goalFatti}</td>
     <td>${s.goalSubiti}</td>
   `;
-  tbodyClassifica.appendChild(row);
+  tbody.appendChild(row);
 });
-
 /* ---------------- CLASSIFICA MARCATORI ---------------- */
 const marcatori = [
   { nome: "Alvin Abazi", squadra: "Nuova Aurora", gol: 8 },
