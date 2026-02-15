@@ -209,7 +209,7 @@ squadre.forEach(s => {
 const marcatori = [
   { nome: "Tommaso Gavello", squadra: "Cantarana", gol: 13 },
   { nome: "Alvin Abazi", squadra: "Nuova Aurora", gol: 12 },
-  { nome: "Pietro Gavello", squadra: "Cantarana", gol: 11 },
+  { nome: "Leone Coda Moscarola", squadra: "Cantarana", gol: 11 },
   { nome: "Luca Barbano", squadra: "Nuova Aurora", gol: 10 },
   { nome: "Leonardo Lazzarino", squadra: "Nuova Aurora", gol: 10 },
   { nome: "Riccardo Garelli", squadra: "Casa del Giovane", gol: 8 },
@@ -243,13 +243,10 @@ const marcatori = [
   { nome: "Andrea Bellati", squadra: "Cantarana", gol: 1 },
 ];
 
-// Ordina per gol decrescenti
 marcatori.sort((a, b) => b.gol - a.gol);
 
-// Inserimento in tabella
-const tbodyMarcatori = document.getElementById("marcatori-body");
-tbodyMarcatori.innerHTML = "";
-
+const tbody = document.getElementById("marcatori-body");
+tbody.innerHTML = "";
 marcatori.forEach(m => {
   const row = document.createElement("tr");
   row.innerHTML = `
@@ -257,7 +254,7 @@ marcatori.forEach(m => {
     <td>${m.squadra}</td>
     <td>${m.gol}</td>
   `;
-  tbodyMarcatori.appendChild(row);
+  tbody.appendChild(row);
 });
 </script>
 <script>
