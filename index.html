@@ -51,7 +51,6 @@
       display: none;
     }
 
-    /* RISULTATI: layout a due colonne */
     #risultati-righe {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -103,7 +102,6 @@
     }
   </style>
 </head>
-
 <body>
   <h1 id="titolo">Campionato CSI di Alessandria – Classifica Squadre</h1>
 
@@ -166,24 +164,25 @@ function mostra(sezione) {
 /* ---------------- CLASSIFICA SQUADRE ---------------- */
 
 const squadre = [
-  { nome: "Cantarana", partite: 7, vittorie: 5, pareggi: 2, sconfitte: 0, goalFatti: 85, goalSubiti: 32 },
-  { nome: "Nuova Aurora", partite: 7, vittorie: 5, pareggi: 2, sconfitte: 0, goalFatti: 77, goalSubiti: 30 },
-  { nome: "Casa del Giovane", partite: 6, vittorie: 2, pareggi: 1, sconfitte: 3, goalFatti: 23, goalSubiti: 36 },
-  { nome: "CDM Futsal", partite: 7, vittorie: 1, pareggi: 1, sconfitte: 5, goalFatti: 19, goalSubiti: 65 },
-  { nome: "Airone", partite: 7, vittorie: 1, pareggi: 0, sconfitte: 6, goalFatti: 29, goalSubiti: 70 },
+  { nome: "Cantarana", partite: 8, vittorie: 6, pareggi: 2, sconfitte: 0, goalFatti: 90, goalSubiti: 32 },
+  { nome: "Nuova Aurora", partite: 8, vittorie: 6, pareggi: 2, sconfitte: 0, goalFatti: 84, goalSubiti: 36 },
+  { nome: "Casa del Giovane", partite: 8, vittorie: 2, pareggi: 1, sconfitte: 5, goalFatti: 29, goalSubiti: 48 },
+  { nome: "Airone", partite: 8, vittorie: 2, pareggi: 0, sconfitte: 6, goalFatti: 36, goalSubiti: 71 },
+  { nome: "CDM Futsal", partite: 8, vittorie: 1, pareggi: 1, sconfitte: 6, goalFatti: 20, goalSubiti: 72 },
 ];
 
 squadre.forEach(s => {
   s.punti = s.vittorie * 3 + s.pareggi;
   s.diffReti = s.goalFatti - s.goalSubiti;
 });
+
 squadre.sort((a, b) => {
   if (b.punti !== a.punti) return b.punti - a.punti;
   return b.diffReti - a.diffReti;
 });
 
-const tbody = document.getElementById("classifica-body");
-tbody.innerHTML = "";
+const tbodyClassifica = document.getElementById("classifica-body");
+tbodyClassifica.innerHTML = "";
 squadre.forEach(s => {
   const row = document.createElement("tr");
   row.innerHTML = `
@@ -196,19 +195,19 @@ squadre.forEach(s => {
     <td>${s.goalFatti}</td>
     <td>${s.goalSubiti}</td>
   `;
-  tbody.appendChild(row);
+  tbodyClassifica.appendChild(row);
 });
 </script>
 <script>
 /* ---------------- CLASSIFICA MARCATORI ---------------- */
 
 const marcatori = [
-  { nome: "Tommaso Gavello", squadra: "Cantarana", gol: 33 },
-  { nome: "Leone Coda Moscarola", squadra: "Cantarana", gol: 29 },
+  { nome: "Tommaso Gavello", squadra: "Cantarana", gol: 36 },
+  { nome: "Leone Coda Moscarola", squadra: "Cantarana", gol: 31 },
   { nome: "Alvin Abazi", squadra: "Nuova Aurora", gol: 17 },
-  { nome: "Leonardo Lazzarino", squadra: "Nuova Aurora", gol: 15 },
-  { nome: "Luca Barbano", squadra: "Nuova Aurora", gol: 10 },
-  { nome: "Riccardo Garelli", squadra: "Casa del Giovane", gol: 8 },
+  { nome: "Leonardo Lazzarino", squadra: "Nuova Aurora", gol: 17 },
+  { nome: "Luca Barbano", squadra: "Nuova Aurora", gol: 13 },
+  { nome: "Riccardo Garelli", squadra: "Casa del Giovane", gol: 9 },
   { nome: "Leonardo Mazzucco", squadra: "Nuova Aurora", gol: 7 },
   { nome: "Thomas Costanzo", squadra: "Nuova Aurora", gol: 7 },
   { nome: "Rayan Belkasmi", squadra: "Airone", gol: 7 },
@@ -216,26 +215,28 @@ const marcatori = [
   { nome: "Giorgio Tassistro", squadra: "Casa del Giovane", gol: 6 },
   { nome: "Andrea Finotto", squadra: "Cantarana", gol: 6 },
   { nome: "Adam Jaadour", squadra: "Airone", gol: 6 },
-  { nome: "Giorgio Torre", squadra: "CDM Futsal", gol: 5 },
+  { nome: "Giorgio Torre", squadra: "CDM Futsal", gol: 6 },
   { nome: "Manuel Amprino", squadra: "Nuova Aurora", gol: 5 },
   { nome: "Mattia Loprete", squadra: "CDM Futsal", gol: 5 },
-  { nome: "Leonardo Martini", squadra: "Casa del Giovane", gol: 4 },
+  { nome: "Lorenzo Ferraris", squadra: "Airone", gol: 5 },
+  { nome: "Diego Sauchelli", squadra: "Nuova Aurora", gol: 5 },
+  { nome: "Leonardo Martini", squadra: "Casa del Giovane", gol: 5 },
   { nome: "Luca Tonel", squadra: "Airone", gol: 4 },
-  { nome: "Diego Sanchelli", squadra: "Nuova Aurora", gol: 3 },
+  { nome: "Giovanni Barillaro", squadra: "Casa del Giovane", gol: 4 },
   { nome: "Leandro Bonello", squadra: "Nuova Aurora", gol: 3 },
   { nome: "Lorenzo Franzé", squadra: "Cantarana", gol: 3 },
   { nome: "Christian Cena", squadra: "Cantarana", gol: 3 },
   { nome: "Anas Dribla", squadra: "Airone", gol: 3 },
   { nome: "Rayyan Kalid", squadra: "Airone", gol: 3 },
+  { nome: "Adam Dliaa", squadra: "Airone", gol: 3 },
   { nome: "Aron Stosanovski", squadra: "Airone", gol: 2 },
-  { nome: "Lorenzo Ferraris", squadra: "Airone", gol: 2 },
   { nome: "Giacomo Sottili", squadra: "CDM Futsal", gol: 2 },
   { nome: "Imrane Djouni", squadra: "Casa del Giovane", gol: 2 },
   { nome: "Federico Pecoraro", squadra: "Nuova Aurora", gol: 2 },
   { nome: "Alessandro D'Antoni", squadra: "Nuova Aurora", gol: 2 },
+  { nome: "Simone Cardinale", squadra: "Airone", gol: 2 },
   { nome: "Carlo Tempesta", squadra: "Casa del Giovane", gol: 1 },
   { nome: "Francesco Taddei", squadra: "CDM Futsal", gol: 1 },
-  { nome: "Adam Dliaa", squadra: "Airone", gol: 1 },
   { nome: "Thomas D'Asilla", squadra: "Airone", gol: 1 },
   { nome: "Andrea Bellati", squadra: "Cantarana", gol: 1 },
   { nome: "Pietro Gavello", squadra: "Cantarana", gol: 1 },
@@ -257,7 +258,6 @@ marcatori.forEach(m => {
   `;
   tbodyMarcatori.appendChild(row);
 });
-
 </script>
 <script>
 /* ---------------- RISULTATI PARTITE ---------------- */
@@ -280,6 +280,9 @@ const risultati = [
   { giornata: 5, casa: "Cantarana", golCasa: 9, trasferta: "Nuova Aurora", golTrasferta: 9 },
   { giornata: 1, casa: "Airone", golCasa: 5, trasferta: "Cantarana", golTrasferta: 10 },
   { giornata: 1, casa: "CDM Futsal", golCasa: 2, trasferta: "Cantarana", golTrasferta: 14 },
+  { giornata: 6, casa: "Casa del Giovane", golCasa: 0, trasferta: "Cantarana", golTrasferta: 5 },
+  { giornata: 6, casa: "CDM Futsal", golCasa: 1, trasferta: "Airone", golTrasferta: 7 },
+  { giornata: 6, casa: "Casa del Giovane", golCasa: 6, trasferta: "Nuova Aurora", golTrasferta: 7 },
 ];
 
 function renderRisultati() {
@@ -297,7 +300,7 @@ function renderRisultati() {
   // Ordina giornate numericamente
   const lista = Object.keys(giornate).map(Number).sort((a, b) => a - b);
 
-  // Dividi in due colonne in modo dinamico
+  // Dividi in due colonne
   const metà = Math.ceil(lista.length / 2);
   const colonnaSinistra = lista.slice(0, metà);
   const colonnaDestra = lista.slice(metà);
@@ -306,7 +309,7 @@ function renderRisultati() {
 
   for (let i = 0; i < righe; i++) {
 
-    // --- COLONNA SINISTRA ---
+    /* --- COLONNA SINISTRA --- */
     const boxSinistra = document.createElement("div");
     boxSinistra.className = "giornata-box";
 
@@ -321,7 +324,7 @@ function renderRisultati() {
       });
     }
 
-    // --- COLONNA DESTRA ---
+    /* --- COLONNA DESTRA --- */
     const boxDestra = document.createElement("div");
     boxDestra.className = "giornata-box";
 
@@ -344,6 +347,5 @@ function renderRisultati() {
 // Render iniziale
 renderRisultati();
 </script>
-
 </body>
 </html>
